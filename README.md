@@ -1,4 +1,4 @@
-# telegram_stranger_bot
+# template-telegram-bot
 This bot template could be used to run a telegram bot.
 
 ## How to run

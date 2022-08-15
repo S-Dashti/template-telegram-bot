@@ -1,5 +1,5 @@
 # telegram_stranger_bot
-This bot template could be used to run a telegram bot and could be customized by the user
+This bot template could be used to run a telegram bot.
 
 ## How to run
 First, add `src` to `PYTHONPATH` by running the following code in the main repo directory:

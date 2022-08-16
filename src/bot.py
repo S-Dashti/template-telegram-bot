@@ -10,9 +10,7 @@ from src.utils.keyboards import main_keyboard
 class Bot():
 	def __init__(self, bot_token) -> None:
 		self.bot = telebot.TeleBot(bot_token)
-		self.send_welcome = self.bot.message_handler(commands=['start', 'help'])(self.send_welcome)
-		self.key_response = self.bot.message_handler(func=lambda m: m.text in main_keyboard.keys)(self.key_response)
-		self.echo_all = self.bot.message_handler(func=lambda m: True)(self.echo_all)
+		self.handler()
 		self.data = []
 
 	def run(self):
@@ -21,29 +19,33 @@ class Bot():
 		self.bot.infinity_polling()
 		write_json(self.data, 'src/data/messages.json')
 		logger.info('bot finished')
+	
+	def handler(self):
+		@self.bot.message_handler(commands=['start', 'help'])
+		def send_welcome(message):
+			logger.info(f'_________________________________\nUser with id: [{message.from_user.id}], username: [{message.from_user.username}] said:\n{message.text} \n')
+			self.bot.reply_to(message, "Say something to answer you")
+			self.data.append(message.json)
 
-	def send_welcome(self, message):
-		logger.info(f'_________________________________\nUser with id: [{message.from_user.id}], username: [{message.from_user.username}] said:\n{message.text} \n')
-		self.bot.reply_to(message, "Say something to answer you")
-		self.data.append(message.json)
-		
-	def key_response(self, message):
-		logger.info(f'_________________________________\nUser with id: [{message.from_user.id}], username: [{message.from_user.username}] said:\n{message.text} \n')
-		self.data.append(message.json)
-		#Add specified action for each key
-		if message.text == 'Active':
-			self.bot.send_message(message.chat.id, f'Action not assigned to <{message.text}> key')
-		if message.text == 'Setting':
-			self.bot.send_message(message.chat.id, f'Action not assigned to <{message.text}> key')
-		if message.text == 'Info':
-			self.bot.send_message(message.chat.id, f'Action not assigned to <{message.text}> key')
-		if message.text == 'Contact us':
-			self.bot.send_message(message.chat.id, f'Action not assigned to <{message.text}> key')
+		@self.bot.message_handler(func=lambda m: m.text in main_keyboard.keys)	
+		def key_response(message):
+			logger.info(f'_________________________________\nUser with id: [{message.from_user.id}], username: [{message.from_user.username}] said:\n{message.text} \n')
+			self.data.append(message.json)
+			#Replace exclusive action for each key
+			if message.text == 'Active':
+				self.bot.send_message(message.chat.id, f'Action not assigned to <{message.text}> key')
+			if message.text == 'Setting':
+				self.bot.send_message(message.chat.id, f'Action not assigned to <{message.text}> key')
+			if message.text == 'Info':
+				self.bot.send_message(message.chat.id, f'Action not assigned to <{message.text}> key')
+			if message.text == 'Contact us':
+				self.bot.send_message(message.chat.id, f'Action not assigned to <{message.text}> key')
 
-	def echo_all(self, message):
-		logger.info(f'_________________________________\nUser with id: [{message.from_user.id}], username: [{message.from_user.username}] said:\n{message.text} \n')
-		self.bot.send_message(message.chat.id, message.text, reply_markup=main_keyboard)
-		self.data.append(message.json)
+		@self.bot.message_handler(func=lambda m: True)
+		def echo_all(message):
+			logger.info(f'_________________________________\nUser with id: [{message.from_user.id}], username: [{message.from_user.username}] said:\n{message.text} \n')
+			self.bot.send_message(message.chat.id, message.text, reply_markup=main_keyboard)
+			self.data.append(message.json)
 
 
 

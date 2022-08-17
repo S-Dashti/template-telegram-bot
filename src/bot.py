@@ -23,27 +23,41 @@ class Bot():
 	def handler(self):
 		@self.bot.message_handler(commands=['start', 'help'])
 		def send_welcome(message):
-			logger.info(f'_________________________________\nUser with id: [{message.from_user.id}], username: [{message.from_user.username}] said:\n{message.text} \n')
+			logger.info(
+				f'\nUser with id: [{message.from_user.id}], username: [{message.from_user.username}] said:\n{message.text} \n'
+				)
 			self.bot.reply_to(message, "Say something to answer you")
 			self.data.append(message.json)
 
 		@self.bot.message_handler(func=lambda m: m.text in main_keyboard.keys)	
 		def key_response(message):
-			logger.info(f'_________________________________\nUser with id: [{message.from_user.id}], username: [{message.from_user.username}] said:\n{message.text} \n')
+			logger.info(
+				f'\nUser with id: [{message.from_user.id}], username: [{message.from_user.username}] said:\n{message.text} \n'
+				)			
 			self.data.append(message.json)
 			#Replace exclusive action for each key
 			if message.text == 'Active':
-				self.bot.send_message(message.chat.id, f'Action not assigned to <{message.text}> key')
+				self.bot.send_message(
+					message.chat.id, f'Action not assigned to <{message.text}> key'
+					)
 			if message.text == 'Setting':
-				self.bot.send_message(message.chat.id, f'Action not assigned to <{message.text}> key')
+				self.bot.send_message(
+					message.chat.id, f'Action not assigned to <{message.text}> key'
+					)
 			if message.text == 'Info':
-				self.bot.send_message(message.chat.id, f'Action not assigned to <{message.text}> key')
+				self.bot.send_message(
+					message.chat.id, f'Action not assigned to <{message.text}> key'
+					)
 			if message.text == 'Contact us':
-				self.bot.send_message(message.chat.id, f'Action not assigned to <{message.text}> key')
+				self.bot.send_message(
+					message.chat.id, f'Action not assigned to <{message.text}> key'
+					)
 
 		@self.bot.message_handler(func=lambda m: True)
 		def echo_all(message):
-			logger.info(f'_________________________________\nUser with id: [{message.from_user.id}], username: [{message.from_user.username}] said:\n{message.text} \n')
+			logger.info(
+				f'\nUser with id: [{message.from_user.id}], username: [{message.from_user.username}] said:\n{message.text} \n'
+				)			
 			self.bot.send_message(message.chat.id, message.text, reply_markup=main_keyboard)
 			self.data.append(message.json)
 

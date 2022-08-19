@@ -8,7 +8,7 @@ from src.utils.keyboards import main_keyboard
 
 
 class Bot():
-    def __init__(self, bot_token) -> None:
+    def __init__(self, bot_token):
         self.bot = telebot.TeleBot(bot_token)
         self.handler()
         self.data = []
@@ -26,10 +26,11 @@ class Bot():
             logger.info(
                 f'\nUser: [{message.from_user.id}], [{message.from_user.username}] said:\n{message.text} \n'
                 )
-            self.bot.reply_to(message, "Say something to answer you")
+            self.bot.reply_to(message, "Say something to reply you exactly what you said (It's template bot)")
             self.data.append(message.json)
 
         #Replace exclusive action for each key
+        #Action key
         @self.bot.message_handler(func=lambda m: m.text == 'Active')	
         def key_response(message):
             logger.info(
@@ -39,6 +40,7 @@ class Bot():
             self.bot.send_message(
                 message.chat.id, f'Action not assigned to <{message.text}> key'
                 )
+        #Setting key
         @self.bot.message_handler(func=lambda m: m.text == 'Setting')	
         def key_response(message):
             logger.info(
@@ -47,6 +49,7 @@ class Bot():
             self.bot.send_message(
                 message.chat.id, f'Action not assigned to <{message.text}> key'
                 )
+        #Info key
         @self.bot.message_handler(func=lambda m: m.text == 'Info')	
         def key_response(message):
             logger.info(
@@ -55,6 +58,7 @@ class Bot():
             self.bot.send_message(
                 message.chat.id, f'Action not assigned to <{message.text}> key'
                 )
+        #Contact us key
         @self.bot.message_handler(func=lambda m: m.text == 'Contact us')	
         def key_response(message):
             logger.info(
@@ -64,6 +68,7 @@ class Bot():
                 message.chat.id, f'Action not assigned to <{message.text}> key'
                 )
 
+        #This function is executed when messages other than the above are received
         @self.bot.message_handler(func=lambda m: True)
         def echo_all(message):
             logger.info(
